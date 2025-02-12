@@ -72,7 +72,12 @@ classdef BecExp < Trial
             end
 
             % Acquisition settings
-            obj.Acquisition = Acquisition(obj.ConfigParameter.AcquisitionName);
+            load("Config.mat", "AcquisitionConfig");
+            % obj.Acquisition =
+            % Acquisition(obj.ConfigParameter.AcquisitionName); %Generalize
+            % for different subclasses with different acquisition methods
+            AcqMethod=AcquisitionConfig.AcqObjType(AcquisitionConfig.Name==obj.ConfigParameter.AcquisitionName);
+            obj.Acquisition=feval(AcqMethod, obj.ConfigParameter.AcquisitionName);
             obj.Acquisition.ImagePath = obj.DataPath;
             obj.Acquisition.ImageFormat = obj.DataFormat;
             obj.Acquisition.ImagePrefix = obj.DataPrefix;
